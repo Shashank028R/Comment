@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -27,77 +28,87 @@ const AuthPage = () => {
 
       if (isLogin) {
         localStorage.setItem("token", data.token);
-        alert("Login Successful");
-        navigate("/dashboard", { replace: true });
+        toast.success("Login successful 🚀");
+        navigate("/", { replace: true });
       } else {
-        alert("Registration Successful");
+        toast.success("Registration successful 🎉");
         setIsLogin(true);
       }
     } catch (error) {
       if (error.response) {
-        console.log("Backend Error: ", error.response.message);
-        alert("Backend Error");
-      } else if (error.request) {
-        console.log("No response from the server: ", error.response);
-        alert("Server is not responding.");
-      } else {
-        console.log("Error: ", error.message);
-        alert("Error Occurred");
-      }
+      toast.error(error.response.data?.message || "Backend error ❌");
+    } else if (error.request) {
+      toast.error("Server not responding ⚠️");
+    } else {
+      toast.error("Something went wrong 😬");
+    }
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
-      <div className="backdrop-blur-lg bg-white/10 p-8 rounded-2xl shadow-xl w-[350px] text-white">
+    <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
+
+      {/* 🔴 Glow background */}
+      <div className="absolute w-[500px] h-[500px] bg-red-600 opacity-20 blur-[150px] rounded-full top-[-100px] animate-pulse"></div>
+
+      {/* Card */}
+      <div className="relative backdrop-blur-xl bg-white/5 border border-red-500/20 p-8 rounded-2xl shadow-lg shadow-red-500/10 w-[350px] text-white transition-all duration-500">
+
         <h2 className="text-2xl font-bold text-center mb-6">
           {isLogin ? "Welcome Back 👋" : "Create Account 🚀"}
         </h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+          {/* Username (register only) */}
           {!isLogin && (
             <input
               type="text"
               name="username"
               placeholder="Username"
               onChange={handleChange}
-              className="px-4 py-2 rounded-lg bg-white/20 placeholder-gray-200 focus:outline-none"
+              className="px-4 py-2 rounded-lg bg-white/10 border border-transparent focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-300"
             />
           )}
 
+          {/* Email */}
           <input
-            type={isLogin ? "text" : "email"}
+            type="text"
             name="email"
             placeholder="Email or Username"
             onChange={handleChange}
-            className="px-4 py-2 rounded-lg bg-white/20 placeholder-gray-200 focus:outline-none"
+            className="px-4 py-2 rounded-lg bg-white/10 border border-transparent focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-300"
           />
 
+          {/* Password */}
           <input
             type="password"
             name="password"
             placeholder="Password"
             onChange={handleChange}
-            className="px-4 py-2 rounded-lg bg-white/20 placeholder-gray-200 focus:outline-none"
+            className="px-4 py-2 rounded-lg bg-white/10 border border-transparent focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-300"
           />
 
+          {/* Button */}
           <button
             type="submit"
-            className="bg-white text-black font-semibold py-2 rounded-lg hover:bg-gray-200 transition"
+            className="bg-red-600 hover:bg-red-700 py-2 rounded-lg font-semibold shadow-md shadow-red-500/30 hover:shadow-red-500/60 transition-all duration-300 transform hover:scale-105"
           >
             {isLogin ? "Login" : "Register"}
           </button>
         </form>
 
-        <p className="text-center mt-4 text-sm">
+        {/* Toggle */}
+        <p className="text-center mt-4 text-sm text-gray-400">
           {isLogin ? "Don't have an account?" : "Already have an account?"}
           <span
             onClick={() => setIsLogin(!isLogin)}
-            className="text-yellow-300 cursor-pointer ml-1"
+            className="text-red-400 cursor-pointer ml-1 hover:underline"
           >
             {isLogin ? "Register" : "Login"}
           </span>
         </p>
+
       </div>
     </div>
   );

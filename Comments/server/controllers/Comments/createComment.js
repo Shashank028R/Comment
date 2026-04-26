@@ -4,17 +4,18 @@ import User from "../../models/User.js";
 const createComment = async (req, res) => {
   try {
     const {
-      authorId,
       message,
       parentCommentId,
       replyingToUserId,
       likedByUserId,
     } = req.body;
 
-    if (!authorId || !message?.trim()) {
+    const authorId = req.user._id;
+
+    if (!message?.trim()) {
       return res
         .status(400)
-        .json({ message: "Author and Message are required." });
+        .json({ message: "Comment are required." });
     }
 
     const author = await User.findById(authorId);

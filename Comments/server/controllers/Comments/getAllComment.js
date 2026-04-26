@@ -4,19 +4,26 @@ const getAllComments = async (req, res) => {
   try {
     const comments = await Comment.find({ parentComment: null })
       .sort({ createdAt: -1 })
-      .populate("author", "username email profilePicture");
+      .populate("author", "username profilePicture");
 
-    for (let comment of comments) {
-      const replies = await Comment.find({ parentComment: comment._id })
-        .populate("author", "username profilePic")
-        .populate("replyingTo", "username");
+    // add counts
+    const updated = await Promise.all(
+      comments.map(async (comment) => {
+        const repliesCount = await Comment.countDocuments({
+          parentComment: comment._id,
+        });
 
-      comment._doc.replies = replies;
-    }
+        return {
+          ...comment.toObject(),
+          repliesCount,
+          likesCount: comment.likes.length,
+        };
+      })
+    );
 
-    res.json(comments);
+    res.json(updated);
   } catch (error) {
-    res.status(500).json({ message: "Server Error: " + error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
