@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Home from "../components/Home";
-import Profile from "../components/Profile";
+import Profile from "../components/ProfilePage";
 import CreateCommentCard from "../components/CreateCommentCard";
 
 const DashboardPage = () => {

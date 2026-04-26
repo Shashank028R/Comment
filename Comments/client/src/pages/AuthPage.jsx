@@ -27,7 +27,10 @@ const AuthPage = () => {
       const { data } = await axios.post(url, form);
 
       if (isLogin) {
+        // 🔥 SAVING BOTH TOKEN AND USER ID
         localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.id); 
+        
         toast.success("Login successful 🚀");
         navigate("/", { replace: true });
       } else {
@@ -36,12 +39,12 @@ const AuthPage = () => {
       }
     } catch (error) {
       if (error.response) {
-      toast.error(error.response.data?.message || "Backend error ❌");
-    } else if (error.request) {
-      toast.error("Server not responding ⚠️");
-    } else {
-      toast.error("Something went wrong 😬");
-    }
+        toast.error(error.response.data?.message || "Backend error ❌");
+      } else if (error.request) {
+        toast.error("Server not responding ⚠️");
+      } else {
+        toast.error("Something went wrong 😬");
+      }
     }
   };
 

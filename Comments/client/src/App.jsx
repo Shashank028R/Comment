@@ -4,6 +4,7 @@ import CreateComment from "./pages/CreateComment";
 import LandingPage from "./pages/LandingPage";
 import { Toaster } from "react-hot-toast";
 import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
 import "./App.css";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/createComment" element={<CreateComment />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/explore" element={<DashboardPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );

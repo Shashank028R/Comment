@@ -9,6 +9,8 @@ import updateLike from '../controllers/Comments/updateLike.js';
 import deleteComment from '../controllers/Comments/deleteComment.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import getReplies from '../controllers/Comments/getReplies.js';
+import getProfile from '../controllers/Profile/getProfile.js';
+import updateProfile from '../controllers/Profile/updateProfile.js';
 
 const router = express.Router();
 
@@ -25,5 +27,7 @@ router.patch('/updateComment', authMiddleware, updateComment);
 router.patch('/updateLike', authMiddleware, updateLike);
 router.delete('/deleteComment', authMiddleware, deleteComment);
 router.get('/comments/:commentId/replies', getReplies);
+router.get("/profile", authMiddleware, getProfile);
+router.patch("/profile", authMiddleware, updateProfile);
 
 export default router;
