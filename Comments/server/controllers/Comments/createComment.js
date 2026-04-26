@@ -1,69 +1,39 @@
 import Comment from "../../models/Comments.js";
-import User from "../../models/User.js";
 
 const createComment = async (req, res) => {
   try {
     const {
       message,
-      parentCommentId,
-      replyingToUserId,
-      likedByUserId,
+      parentComment,
+      replyingTo
     } = req.body;
 
-    const authorId = req.user._id;
+    const userId = req.user._id;
 
-    if (!message?.trim()) {
-      return res
-        .status(400)
-        .json({ message: "Comment are required." });
+    if (!message) {
+      return res.status(400).json({ message: "Message required" });
     }
 
-    const author = await User.findById(authorId);
-
-    if (!author) {
-      return res.status(404).json({ message: "Author Not Found!" });
-    }
-
-    if (parentCommentId) {
-      const parent = await Comment.findById(parentCommentId);
-
-      if (!parent) {
-        return res.status(404).json({ message: "Parent Comment Not Found!" });
-      }
-    }
-    if (replyingToUserId) {
-      const replyUser = await User.findById(replyingToUserId);
-
-      if (!replyUser) {
-        return res.status(404).json({ message: "Replying User Not Found!" });
-      }
-    }
-
-    let likedUser = [];
-    if (likedByUserId) {
-      const likes = await User.findById(likedByUserId);
-
-      if (!likes) {
-        return res.status(404).json({ message: "Liked By User Not Found!" });
-      }
-
-      likedUser.push(likedByUserId);
-    }
-
+    // ✅ create comment properly
     const newComment = await Comment.create({
-      author: authorId,
+      author: userId,
       message,
-      likes: likedUser,
-      parentComment: parentCommentId || null,
-      replyingTo: replyingToUserId || null,
+      parentComment: parentComment || null,
+      replyingTo: replyingTo || null,
+      likes: []
     });
 
-    res.status(201).json({
-      message: "Comment created successful",
-      newComment,
-    });
+    // ✅ populate before sending back
+    const populatedComment = await Comment.findById(newComment._id)
+      .populate("author", "username profilePicture")
+      .populate("replyingTo", "username");
+
+    res.status(201).json(populatedComment);
+
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({
+      message: "Internal Server Error: " + error.message
+    });
   }
 };
 

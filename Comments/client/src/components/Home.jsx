@@ -4,7 +4,11 @@ import CommentCard from "./CommentCard";
 
 const Home = () => {
   const commentRef = useRef();
+
   const [comments, setComments] = useState([]);
+  
+  // 🔥 GLOBAL reply state (IMPORTANT)
+  const [activeReply, setActiveReply] = useState(null);
 
   const scrollToComments = () => {
     commentRef.current.scrollIntoView({ behavior: "smooth" });
@@ -58,7 +62,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 💬 COMMENTS SECTION (UPDATED) */}
+      {/* 💬 COMMENTS SECTION */}
       <section
         ref={commentRef}
         className="min-h-screen px-6 py-12 bg-gradient-to-b from-black to-gray-900 max-w-5xl mx-auto"
@@ -69,10 +73,14 @@ const Home = () => {
 
         <div className="space-y-4">
 
-          {/* 🔥 Real Data */}
           {comments.length > 0 ? (
             comments.map((comment) => (
-              <CommentCard key={comment._id} comment={comment} />
+              <CommentCard
+                key={comment._id}
+                comment={comment}
+                activeReply={activeReply}        // 🔥 PASS DOWN
+                setActiveReply={setActiveReply}  // 🔥 PASS DOWN
+              />
             ))
           ) : (
             <p className="text-gray-500 text-center">
