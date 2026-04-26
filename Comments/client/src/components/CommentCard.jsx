@@ -44,7 +44,7 @@ const CommentCard = ({ comment, activeReply, setActiveReply }) => {
   const fetchReplies = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/comments/${comment._id}/replies`
+        `https://comments-backend-934h.onrender.com/api/comments/${comment._id}/replies`
       );
       setReplies(res.data);
       setRepliesCount(res.data.length);
@@ -73,7 +73,7 @@ const CommentCard = ({ comment, activeReply, setActiveReply }) => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.patch(
-        "http://localhost:3000/api/updateLike",
+        "https://comments-backend-934h.onrender.com/api/updateLike",
         { commentId: comment._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -90,7 +90,7 @@ const CommentCard = ({ comment, activeReply, setActiveReply }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:3000/api/comments",
+        "https://comments-backend-934h.onrender.com/api/comments",
         { message: replyText, parentComment: comment._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -109,7 +109,7 @@ const CommentCard = ({ comment, activeReply, setActiveReply }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        "http://localhost:3000/api/updateComment",
+        "https://comments-backend-934h.onrender.com/api/updateComment",
         { commentId: comment._id, message: editMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -125,7 +125,7 @@ const CommentCard = ({ comment, activeReply, setActiveReply }) => {
   const executeDelete = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete("http://localhost:3000/api/deleteComment", {
+      await axios.delete("https://comments-backend-934h.onrender.com/api/deleteComment", {
         headers: { Authorization: `Bearer ${token}` },
         data: { commentId: comment._id } 
       });

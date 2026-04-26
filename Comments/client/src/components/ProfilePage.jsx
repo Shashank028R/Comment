@@ -22,7 +22,7 @@ const ProfilePage = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:3000/api/profile", {
+        const res = await axios.get("https://comments-backend-934h.onrender.com/api/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -47,7 +47,7 @@ const ProfilePage = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.patch(
-        "http://localhost:3000/api/profile",
+        "https://comments-backend-934h.onrender.com/api/profile",
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );

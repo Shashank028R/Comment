@@ -21,8 +21,8 @@ const AuthPage = () => {
 
     try {
       const url = isLogin
-        ? "http://localhost:3000/api/auth/login"
-        : "http://localhost:3000/api/auth/register";
+        ? "https://comments-backend-934h.onrender.com/api/auth/login"
+        : "https://comments-backend-934h.onrender.com/api/auth/register";
 
       const { data } = await axios.post(url, form);
 

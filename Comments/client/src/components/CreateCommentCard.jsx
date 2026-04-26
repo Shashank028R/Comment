@@ -20,7 +20,7 @@ const CreateComment = () => {
       if (!token) {
         return toast.error("You must be logged in to post a comment ");
       }
-      const url = "http://localhost:3000/api/comments";
+      const url = "https://comments-backend-934h.onrender.com/api/comments";
       const { data } = await axios.post(
         url,
         { message: comment },

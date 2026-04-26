@@ -23,7 +23,7 @@ const Home = () => {
     const fetchComments = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:3000/api/getComments"
+          "https://comments-backend-934h.onrender.com/api/getComments"
         );
         setComments(res.data);
       } catch (error) {
