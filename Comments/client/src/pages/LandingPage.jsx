@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
-
 const LandingPage = () => {
   const navigate = useNavigate();
   const isLoggedIn = !!localStorage.getItem("token");
 
   const handleGetStarted = () => {
     if (isLoggedIn) {
-      navigate("/createComment", { replace: true });
+      navigate("/aboutUs", { replace: true });
     } else {
       navigate("/login", { replace: true });
     }
@@ -52,7 +51,7 @@ const LandingPage = () => {
             onClick={handleGetStarted}
             className="px-8 py-3.5 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-semibold rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] transform hover:-translate-y-1 active:scale-95 transition-all duration-300"
           >
-            {isLoggedIn ? "Go to Comments" : "Get Started"}
+            {isLoggedIn ? "About Us" : "Get Started"}
           </button>
 
           <button

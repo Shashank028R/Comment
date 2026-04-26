@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
-import CreateComment from "./pages/CreateComment";
 import LandingPage from "./pages/LandingPage";
 import { Toaster } from "react-hot-toast";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
+import AboutPage from "./pages/AboutPage";
 import "./App.css";
 
 function App() {
@@ -36,10 +36,9 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/createComment" element={<CreateComment />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/explore" element={<DashboardPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/aboutUs" element={<AboutPage />} />
       </Routes>
     </BrowserRouter>
   );
