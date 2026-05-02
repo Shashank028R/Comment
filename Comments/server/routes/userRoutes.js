@@ -11,6 +11,7 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 import getReplies from '../controllers/Comments/getReplies.js';
 import getProfile from '../controllers/Profile/getProfile.js';
 import updateProfile from '../controllers/Profile/updateProfile.js';
+import verifyEmail from '../controllers/Users/verifyEmail.js';
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.get('/', (req, res) => {
 router.get('/getComments/:commentId', getComment);
 router.get('/getComments', getAllComments);
 router.post('/auth/register', createUser);
+router.post('/auth/verify-email', verifyEmail);
 router.post('/auth/login', loginUser);
 router.post('/comments', authMiddleware, createComment);
 router.patch('/updateComment', authMiddleware, updateComment);
