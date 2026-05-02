@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../config";
 
 const CreateComment = () => {
   const [comment, setComment] = useState("");
@@ -20,7 +21,7 @@ const CreateComment = () => {
       if (!token) {
         return toast.error("You must be logged in to post a comment ");
       }
-      const url = "https://comments-backend-934h.onrender.com/api/comments";
+      const url = `${BACKEND_URL}/api/comments`;
       const { data } = await axios.post(
         url,
         { message: comment },

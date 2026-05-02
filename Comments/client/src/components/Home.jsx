@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import CommentCard from "./CommentCard";
 import LogoutButton from "./LogoutButton"; // 🔥 ADDED IMPORT
+import { BACKEND_URL } from "../config";
 
 const Home = () => {
   const commentRef = useRef();
 
   const [comments, setComments] = useState([]);
-  
+
   // 🔥 GLOBAL reply state (IMPORTANT)
   const [activeReply, setActiveReply] = useState(null);
 
@@ -22,9 +23,7 @@ const Home = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await axios.get(
-          "https://comments-backend-934h.onrender.com/api/getComments"
-        );
+        const res = await axios.get(`${BACKEND_URL}/api/getComments`);
         setComments(res.data);
       } catch (error) {
         console.log("Error fetching comments:", error);
@@ -37,7 +36,6 @@ const Home = () => {
   return (
     // Changed bg-black to bg-[#050505] and added relative z-0 to match the premium theme
     <div className="bg-[#050505] text-white min-h-screen overflow-y-auto transition-all duration-300 relative z-0">
-
       {/* 🔥 LOGOUT BUTTON (Only shows if user is logged in) */}
       {isLoggedIn && <LogoutButton />}
 
@@ -85,8 +83,8 @@ const Home = () => {
               <CommentCard
                 key={comment._id}
                 comment={comment}
-                activeReply={activeReply}        // 🔥 PASS DOWN
-                setActiveReply={setActiveReply}  // 🔥 PASS DOWN
+                activeReply={activeReply} // 🔥 PASS DOWN
+                setActiveReply={setActiveReply} // 🔥 PASS DOWN
               />
             ))
           ) : (

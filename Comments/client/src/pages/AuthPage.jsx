@@ -2,14 +2,15 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../config";
 
 const AuthPage = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
-  
+
   // 🔥 NEW: Track if we are in the OTP verification step
-  const [isVerifying, setIsVerifying] = useState(false); 
-  
+  const [isVerifying, setIsVerifying] = useState(false);
+
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -29,10 +30,9 @@ const AuthPage = () => {
       // 1. HANDLE OTP VERIFICATION SUBMISSION
       // ---------------------------------------------
       if (isVerifying) {
-        // NOTE: Adjust this URL to match your actual backend verification route
-        const url = "https://comments-backend-934h.onrender.com/api/auth/verify-email"; 
+        const url = `${BACKEND_URL}/api/auth/verify-email`;
         await axios.post(url, { email: form.email, otp: form.otp });
-        
+
         toast.success("Email verified! You can now login. 🎉");
         setIsVerifying(false);
         setIsLogin(true); // Switch to login screen
@@ -43,22 +43,22 @@ const AuthPage = () => {
       // 2. HANDLE LOGIN & REGISTER SUBMISSION
       // ---------------------------------------------
       const url = isLogin
-        ? "https://comments-backend-934h.onrender.com/api/auth/login"
-        : "https://comments-backend-934h.onrender.com/api/auth/register";
+        ? `${BACKEND_URL}/api/auth/login`
+        : `${BACKEND_URL}/api/auth/register`;
 
       const { data } = await axios.post(url, form);
 
       if (isLogin) {
         // SAVING BOTH TOKEN AND USER ID
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.id); 
-        
+        localStorage.setItem("userId", data.id);
+
         toast.success("Login successful 🚀");
         navigate("/", { replace: true });
       } else {
         // 🔥 CHANGED: Instead of switching to login, switch to OTP view
         toast.success("OTP sent to your email! 📩");
-        setIsVerifying(true); 
+        setIsVerifying(true);
       }
     } catch (error) {
       if (error.response) {
@@ -78,20 +78,23 @@ const AuthPage = () => {
 
       {/* Card */}
       <div className="relative backdrop-blur-xl bg-white/5 border border-red-500/20 p-8 rounded-2xl shadow-lg shadow-red-500/10 w-[350px] text-white transition-all duration-500">
-        
         {/* Dynamic Title */}
         <h2 className="text-2xl font-bold text-center mb-6">
-          {isVerifying ? "Verify Email ✉️" : isLogin ? "Welcome Back 👋" : "Create Account 🚀"}
+          {isVerifying
+            ? "Verify Email ✉️"
+            : isLogin
+              ? "Welcome Back 👋"
+              : "Create Account 🚀"}
         </h2>
 
         {isVerifying && (
           <p className="text-center text-sm text-gray-400 mb-4">
-            We sent a 6-digit code to <span className="text-white font-semibold">{form.email}</span>
+            We sent a 6-digit code to{" "}
+            <span className="text-white font-semibold">{form.email}</span>
           </p>
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          
           {/* ------------------------------------------- */}
           {/* OTP VIEW */}
           {/* ------------------------------------------- */}
@@ -151,15 +154,15 @@ const AuthPage = () => {
         {/* Dynamic Toggle Footer */}
         <p className="text-center mt-4 text-sm text-gray-400">
           {isVerifying ? (
-             <span
-             onClick={() => setIsVerifying(false)}
-             className="text-red-400 cursor-pointer ml-1 hover:underline"
-           >
-             Cancel Verification
-           </span>
+            <span
+              onClick={() => setIsVerifying(false)}
+              className="text-red-400 cursor-pointer ml-1 hover:underline"
+            >
+              Cancel Verification
+            </span>
           ) : isLogin ? (
             <>
-              Don't have an account? 
+              Don't have an account?
               <span
                 onClick={() => setIsLogin(false)}
                 className="text-red-400 cursor-pointer ml-1 hover:underline"
@@ -169,7 +172,7 @@ const AuthPage = () => {
             </>
           ) : (
             <>
-              Already have an account? 
+              Already have an account?
               <span
                 onClick={() => setIsLogin(true)}
                 className="text-red-400 cursor-pointer ml-1 hover:underline"
@@ -179,7 +182,6 @@ const AuthPage = () => {
             </>
           )}
         </p>
-
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { BACKEND_URL } from "../config";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -17,14 +18,11 @@ const ProfilePage = () => {
       try {
         const token = localStorage.getItem("token");
 
-        const res = await axios.get(
-          "https://comments-backend-934h.onrender.com/api/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${BACKEND_URL}/api/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         setUser(res.data);
         setForm({
@@ -49,15 +47,11 @@ const ProfilePage = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.patch(
-        "https://comments-backend-934h.onrender.com/api/profile",
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.patch(`${BACKEND_URL}/api/profile`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setUser(res.data);
       setEditMode(false);
@@ -72,18 +66,14 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4 relative">
-
       {/* 🔴 Glow */}
       <div className="absolute w-[600px] h-[600px] bg-red-600 opacity-20 blur-[150px] rounded-full top-[-150px] animate-pulse"></div>
 
       <div className="relative w-full max-w-md bg-white/5 border border-red-500/20 rounded-2xl p-6 backdrop-blur-xl shadow-lg shadow-red-500/20">
-
         {/* Profile Image */}
         <div className="flex justify-center mb-4">
           <img
-            src={
-              form.profilePicture || "https://i.pravatar.cc/100"
-            }
+            src={form.profilePicture || "https://i.pravatar.cc/100"}
             className="w-24 h-24 rounded-full border-2 border-red-500 object-cover"
           />
         </div>

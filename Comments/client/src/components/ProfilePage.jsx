@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { User, Mail, Link as LinkIcon, Edit2, Check, X, Camera } from "lucide-react";
+import {
+  User,
+  Mail,
+  Link as LinkIcon,
+  Edit2,
+  Check,
+  X,
+  Camera,
+} from "lucide-react";
 import LogoutButton from "./LogoutButton"; // Make sure the path is correct!
+import { BACKEND_URL } from "../config";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -22,9 +31,7 @@ const ProfilePage = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("https://comments-backend-934h.onrender.com/api/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(`${BACKEND_URL}/api/profile`, {});
 
         setUser(res.data);
         setForm({
@@ -46,11 +53,9 @@ const ProfilePage = () => {
   const handleUpdate = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.patch(
-        "https://comments-backend-934h.onrender.com/api/profile",
-        form,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await axios.patch(`${BACKEND_URL}/api/profile`, form, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       setUser(res.data);
       setEditMode(false);
@@ -70,21 +75,20 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] flex items-center justify-center px-4 relative overflow-hidden z-0">
-      
       {/* 🔥 LOGOUT BUTTON ADDED HERE 🔥 */}
       <LogoutButton />
 
       {/* 🔥 DYNAMIC BACKGROUND LIGHTING 🔥 */}
       <div className="fixed inset-0 pointer-events-none z-[-1]">
         <div className="absolute top-[-10%] left-[10%] w-[500px] h-[500px] bg-red-600/20 blur-[120px] rounded-full mix-blend-screen animate-pulse"></div>
-        <div 
-          className="absolute bottom-[-10%] right-[10%] w-[600px] h-[600px] bg-red-800/20 blur-[150px] rounded-full mix-blend-screen animate-pulse" 
+        <div
+          className="absolute bottom-[-10%] right-[10%] w-[600px] h-[600px] bg-red-800/20 blur-[150px] rounded-full mix-blend-screen animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
       </div>
 
       {/* 🪟 TRANSLUCENT GLASS CARD 🪟 */}
-      <div 
+      <div
         className={`relative w-full max-w-md bg-white/[0.03] border border-white/10 rounded-3xl p-8 backdrop-blur-lg shadow-[0_8px_32px_0_rgba(255,0,0,0.1)] transition-all duration-700 ease-out transform ${
           isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
         }`}
@@ -93,7 +97,9 @@ const ProfilePage = () => {
           <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 drop-shadow-sm">
             Your Profile
           </h1>
-          <p className="text-gray-400 text-sm mt-1 font-light">Manage your account details</p>
+          <p className="text-gray-400 text-sm mt-1 font-light">
+            Manage your account details
+          </p>
         </div>
 
         <div className="flex justify-center mb-8 relative z-10">
@@ -127,7 +133,9 @@ const ProfilePage = () => {
                 disabled={!editMode}
                 onChange={handleChange}
                 className={`w-full pl-11 pr-4 py-3 rounded-xl bg-black/20 border border-white/5 text-white transition-all duration-300 outline-none backdrop-blur-sm ${
-                  editMode ? "focus:border-red-500/50 focus:bg-black/40 focus:ring-1 focus:ring-red-500/50" : "opacity-70 cursor-not-allowed"
+                  editMode
+                    ? "focus:border-red-500/50 focus:bg-black/40 focus:ring-1 focus:ring-red-500/50"
+                    : "opacity-70 cursor-not-allowed"
                 }`}
               />
             </div>
@@ -166,7 +174,9 @@ const ProfilePage = () => {
                 onChange={handleChange}
                 placeholder="https://example.com/avatar.png"
                 className={`w-full pl-11 pr-4 py-3 rounded-xl bg-black/20 border border-white/5 text-white transition-all duration-300 outline-none backdrop-blur-sm ${
-                  editMode ? "focus:border-red-500/50 focus:bg-black/40 focus:ring-1 focus:ring-red-500/50" : "opacity-70 cursor-not-allowed"
+                  editMode
+                    ? "focus:border-red-500/50 focus:bg-black/40 focus:ring-1 focus:ring-red-500/50"
+                    : "opacity-70 cursor-not-allowed"
                 }`}
               />
             </div>
@@ -176,15 +186,30 @@ const ProfilePage = () => {
         <div className="mt-8 relative z-10 transition-all duration-300">
           {editMode ? (
             <div className="flex gap-4 animate-fade-in">
-              <button onClick={handleUpdate} className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-medium py-3 px-4 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.4)] transform hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
+              <button
+                onClick={handleUpdate}
+                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white font-medium py-3 px-4 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.4)] transform hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+              >
                 <Check size={18} /> Save Changes
               </button>
-              <button onClick={() => { setEditMode(false); setForm({ username: user.username, profilePicture: user.profilePicture || "" }); }} className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-gray-300 font-medium py-3 px-4 rounded-xl border border-white/10 hover:border-white/20 transform hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
+              <button
+                onClick={() => {
+                  setEditMode(false);
+                  setForm({
+                    username: user.username,
+                    profilePicture: user.profilePicture || "",
+                  });
+                }}
+                className="flex-1 flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-gray-300 font-medium py-3 px-4 rounded-xl border border-white/10 hover:border-white/20 transform hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+              >
                 <X size={18} /> Cancel
               </button>
             </div>
           ) : (
-            <button onClick={() => setEditMode(true)} className="w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-medium py-3 px-4 rounded-xl border border-white/10 hover:border-red-500/40 hover:text-red-300 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] transform hover:-translate-y-0.5 active:scale-95 transition-all duration-200">
+            <button
+              onClick={() => setEditMode(true)}
+              className="w-full flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 text-white font-medium py-3 px-4 rounded-xl border border-white/10 hover:border-red-500/40 hover:text-red-300 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] transform hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+            >
               <Edit2 size={18} /> Edit Profile
             </button>
           )}
